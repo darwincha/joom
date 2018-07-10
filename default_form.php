@@ -50,7 +50,7 @@ $database = mysqli_select_db($con,$database_conexion);
 		$sqlServicios = "SELECT rstadetalle.vc_rstadet_nombre,rstadetalle.vc_rstadet_direcurl,rstadetalle.ch_pregtip_codigo, "
 		. "clasificacion.vc_clasific_categoria,entidad.entvnombre,rstadetalle.vc_rstadet_descripcion,rstadetalle.vc_rsta_outputformat "
 		. "FROM idepcoor.gen_entidad entidad, idepcoor.gepr_ta_respuesta respuesta, idepcoor.gepr_ta_rstadetalle rstadetalle, idepcoor.gepr_ta_clasific clasificacion "
-		. "WHERE ((rstadetalle.vc_rstadet_nombre like '%$cadena%')or(rstadetalle.vc_rstadet_descripcion like '%$cadena%')or(rstadetalle.vc_rstadet_direcurl like '%$cadena%')) "
+		. "WHERE ((rstadetalle.vc_rstadet_nombre like '%$cadena%')or(rstadetalle.vc_rstadet_descripcion like '%$cadena%')or(rstadetalle.vc_rstadet_direcurl like '%$cadena%')or(rstadetalle.vc_rstadet_keywords like '%$cadena%')) "
 		. "and((rstadetalle.ch_rstadet_accesolibre>='SI')or(rstadetalle.ch_rstadet_accesolibre is null))and(respuesta.entnid=entidad.entnid)and(rstadetalle.pk_id_rsta=respuesta.pk_id_rsta)and(rstadetalle.pk_id_clasific=clasificacion.pk_id_clasific)";				
 		$resultServicios = mysqli_query($con,$sqlServicios);
 		$num_servicios = mysqli_num_rows($resultServicios);		
