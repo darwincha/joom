@@ -42,7 +42,7 @@ $database = mysqli_select_db($con,$database_conexion);
 		/* PORTALES */
 		$sqlportales = "SELECT rstadetalle.vc_rstadet_nombre,rstadetalle.vc_rstadet_direcurl,'Geoportal','Geoportal',entidad.entvnombre,rstadetalle.vc_rstadet_descripcion "
 		. "FROM idepcoor.gen_entidad entidad, idepcoor.gepr_ta_respuesta respuesta, idepcoor.gepr_ta_rstadetalle rstadetalle "
-		. "WHERE ((rstadetalle.vc_rstadet_nombre like '%$cadena%')or(rstadetalle.vc_rstadet_descripcion like '%$cadena%')or(rstadetalle.vc_rstadet_direcurl like '%$cadena%')) "
+		. "WHERE ((rstadetalle.vc_rstadet_nombre like '%$cadena%')or(rstadetalle.vc_rstadet_descripcion like '%$cadena%')or(rstadetalle.vc_rstadet_direcurl like '%$cadena%')or(rstadetalle.vc_rstadet_keywords like '%$cadena%')) "
 		. "and(respuesta.entnid=entidad.entnid)and(rstadetalle.pk_id_rsta=respuesta.pk_id_rsta)and((rstadetalle.ch_pregtip_codigo='SI')OR(rstadetalle.ch_pregtip_codigo='NO')) ";		
 		$resultportales = mysqli_query($con,$sqlportales);
 		$num_portales = mysqli_num_rows($resultportales);		
