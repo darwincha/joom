@@ -7,55 +7,56 @@ $httphost = filter_input(INPUT_SERVER, 'HTTP_HOST');
 ?>
 <html>
 <head>	
-  <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
-  <!--*************** Ventanas Modales**********************-->
-  <link rel="stylesheet" type="text/css" href="/servicios/css/ventanas-modales.css">
-  <script type="text/javascript" src="/servicios/code/jquery-1.8.0.min.js"></script>
-  <script type="text/javascript" src="/servicios/code/ventanas-modales.js"></script>   
-  <!--**************************************************************-->
-  <link rel="stylesheet" href="/servicios/code/jquery-ui.css">
-  <script src="/servicios/code/jquery-ui.js"></script>
-  <script>
-  $(function() {
-    $( "#tabs" ).tabs();
-  });
-  $(function() {
-    $( "#accordion" ).accordion({
-      heightStyle: "content"
-    });
-  });
-  $(function() {
-    $( "#accordion1" ).accordion({
-      heightStyle: "content"
-    });
-  });
-  </script>
-  <link rel="stylesheet" href="/servicios/css/style.css">
-  <link rel="stylesheet" href="/servicios/css/style_responsive.css">	
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+	<!--*************** Ventanas Modales**********************-->
+	<link rel="stylesheet" type="text/css" href="/servicios/css/ventanas-modales.css">
+	<script type="text/javascript" src="/servicios/code/jquery-1.8.0.min.js"></script>
+	<script type="text/javascript" src="/servicios/code/ventanas-modales.js"></script>   
+	<!--**************************************************************-->
+	<link rel="stylesheet" href="/servicios/code/jquery-ui.css">
+	<script src="/servicios/code/jquery-ui.js"></script>
+	<script>
+	$(function() {
+		$( "#tabs" ).tabs();
+	});
+	$(function() {
+		$( "#accordion" ).accordion({
+			heightStyle: "content"
+		});
+	});
+	$(function() {
+		$( "#accordion1" ).accordion({
+			heightStyle: "content"
+		});
+	});
+	</script>
+	<link rel="stylesheet" href="/servicios/css/style.css">
+	<link rel="stylesheet" href="/servicios/css/style_responsive.css">	
 </head>
 <body>
 <div id="tabs">
 	<ul>
-		<li><a href="#tabs-1">WFS por Sector</a></li>
-        <li><a href="#tabs-2">WFS por Clasificación</a></li>
-    </ul>
+		<li><a href="#tabs-1">WFS por Entidad</a></li>
+		<li><a href="#tabs-2">WFS por Clasificación</a></li>
+	</ul>
 <?php
 	echo "<div id='tabs-1'><div id='accordion1'>";	
-	$sqlSector = "SELECT DISTINCT poder.podvnombre "
-	. "FROM idepcoor.gen_entidad entidad, idepcoor.gepr_ta_respuesta respuesta, idepcoor.gepr_ta_rstadetalle rstadetalle, idepcoor.ge_poder poder "
-	. "WHERE (poder.podnid=entidad.podnid)and(entidad.entnid=respuesta.entnid)and(respuesta.pk_id_rsta=rstadetalle.pk_id_rsta)and(rstadetalle.pk_id_pregtip='2')";	        
-    $resultSector = mysqli_query($con,$sqlSector);
- 	while ($row = mysqli_fetch_row($resultSector))                
+	$sqlEntidad = "SELECT DISTINCT entidad.entvnombre "
+	. "FROM idepcoor.gen_entidad entidad, idepcoor.gepr_ta_respuesta respuesta, idepcoor.gepr_ta_rstadetalle rstadetalle "
+	. "WHERE (entidad.entnid=respuesta.entnid)and(respuesta.pk_id_rsta=rstadetalle.pk_id_rsta)and(rstadetalle.pk_id_pregtip='2') "
+	. "ORDER BY entidad.entvnombre";		
+    $resultEntidad = mysqli_query($con,$sqlEntidad);
+	while ($row = mysqli_fetch_row($resultEntidad))                
 	{
-		$sector=$row[0];        
-        $sqlListaSector = "SELECT rstadetalle.vc_rstadet_nombre,rstadetalle.vc_rstadet_descripcion,clasificacion.vc_clasific_categoria,entidad.entvnombre,rstadetalle.vc_rstadet_direcurl,CASE WHEN b_direcurl_estado='1' THEN 'activo.png' ELSE 'inactivo.png' END,rstadetalle.vc_rsta_outputformat "
-    	. "FROM idepcoor.gen_entidad entidad, idepcoor.gepr_ta_respuesta respuesta, idepcoor.gepr_ta_rstadetalle rstadetalle, idepcoor.gepr_ta_clasific clasificacion, idepcoor.ge_poder poder "
-    	. "WHERE (respuesta.entnid=entidad.entnid)and(rstadetalle.pk_id_rsta=respuesta.pk_id_rsta)and(rstadetalle.pk_id_clasific=clasificacion.pk_id_clasific)and(poder.podnid=entidad.podnid)and(rstadetalle.pk_id_pregtip='2')and(poder.podvnombre='$sector')";                   
+		$entidad=$row[0];        
+		$sqlListaSector = "SELECT rstadetalle.vc_rstadet_nombre,rstadetalle.vc_rstadet_descripcion,clasificacion.vc_clasific_categoria,entidad.entvnombre,rstadetalle.vc_rstadet_direcurl,CASE WHEN b_direcurl_estado='1' THEN 'activo.png' ELSE 'inactivo.png' END,rstadetalle.vc_rsta_outputformat "
+		. "FROM idepcoor.gen_entidad entidad, idepcoor.gepr_ta_respuesta respuesta, idepcoor.gepr_ta_rstadetalle rstadetalle, idepcoor.gepr_ta_clasific clasificacion "
+		. "WHERE (respuesta.entnid=entidad.entnid)and(rstadetalle.pk_id_rsta=respuesta.pk_id_rsta)and(rstadetalle.pk_id_clasific=clasificacion.pk_id_clasific)and(rstadetalle.pk_id_pregtip='2')and(entidad.entvnombre='$entidad')";                   
 		$resultListaSector = mysqli_query($con,$sqlListaSector); 
 		$tiposoutput = array();
 		$select;
 		$i;		
-		echo "<h3>$sector</h3><div><table><thead><tr><th>Nombre del Servicio</th><th>Descripción</th><th>Tema</th><th>Proporcionado por</th><th>Estado</th><th>Dirección del Servicio</th><th>Descargar</th></tr></thead><tbody>"; 
+		echo "<h3>$entidad</h3><div><table><thead><tr><th>Nombre del Servicio</th><th>Descripción</th><th>Tema</th><th>Proporcionado por</th><th>Estado</th><th>Dirección del Servicio</th><th>Descargar</th></tr></thead><tbody>"; 
         while ($row = mysqli_fetch_row($resultListaSector))      	
         {			
 			$tiposoutput=  explode(",", $row[6]);
