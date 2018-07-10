@@ -45,8 +45,8 @@ $httphost = filter_input(INPUT_SERVER, 'HTTP_HOST');
 	. "FROM idepcoor.gen_entidad entidad, idepcoor.gepr_ta_respuesta respuesta, idepcoor.gepr_ta_rstadetalle rstadetalle "
 	. "WHERE (entidad.entnid=respuesta.entnid)and(respuesta.pk_id_rsta=rstadetalle.pk_id_rsta)and((rstadetalle.pk_id_pregtip='1')or(rstadetalle.pk_id_pregtip='10'))"	
 	. "ORDER BY entidad.entvnombre";		
-  $resultEntidad = mysqli_query($con,$sqlEntidad);
- 	while ($row = mysqli_fetch_row($resultEntidad))                
+	$resultEntidad = mysqli_query($con,$sqlEntidad);
+	while ($row = mysqli_fetch_row($resultEntidad))                
 	{
 		$entidad=$row[0];     
 		$sqlListaSector = "SELECT rstadetalle.vc_rstadet_nombre,rstadetalle.vc_rstadet_descripcion,clasificacion.vc_clasific_categoria,entidad.entvnombre,rstadetalle.vc_rstadet_direcurl,CASE WHEN b_direcurl_estado='1' THEN 'activo.png' ELSE 'inactivo.png' END "
@@ -91,7 +91,7 @@ $httphost = filter_input(INPUT_SERVER, 'HTTP_HOST');
 	. "WHERE (rstadetalle.pk_id_clasific=clasificacion.pk_id_clasific)and((rstadetalle.pk_id_pregtip='1')or(rstadetalle.pk_id_pregtip='10'))";		
 	$resultClasificacion = mysqli_query($con,$sqlClasificacion);                  
  	while ($row = mysqli_fetch_row($resultClasificacion))            
-  {
+	{
 		$clasificacion=$row[0];		
 		$sqlListaClasif = "SELECT rstadetalle.vc_rstadet_nombre,rstadetalle.vc_rstadet_descripcion,entidad.entvnombre,rstadetalle.vc_rstadet_direcurl,CASE WHEN b_direcurl_estado='1' THEN 'activo.png' ELSE 'inactivo.png' END "
     	. "FROM idepcoor.gen_entidad entidad, idepcoor.gepr_ta_respuesta respuesta, idepcoor.gepr_ta_rstadetalle rstadetalle, idepcoor.gepr_ta_clasific clasificacion, idepcoor.ge_poder poder "
