@@ -979,32 +979,6 @@ body .ui-tooltip {
 	width: 16px;
 	height: 16px;
 }
-/*
-.ui-icon,
-.ui-widget-content .ui-icon {
-	background-image: url("images/ui-icons_c47a23_256x240.png");
-}
-.ui-widget-header .ui-icon {
-	background-image: url("images/ui-icons_ffffff_256x240.png");
-}
-.ui-state-default .ui-icon {
-	background-image: url("images/ui-icons_f08000_256x240.png");
-}
-.ui-state-hover .ui-icon,
-.ui-state-focus .ui-icon {
-	background-image: url("images/ui-icons_f08000_256x240.png");
-}
-.ui-state-active .ui-icon {
-	background-image: url("images/ui-icons_f35f07_256x240.png");
-}
-.ui-state-highlight .ui-icon {
-	background-image: url("images/ui-icons_cb672b_256x240.png");
-}
-.ui-state-error .ui-icon,
-.ui-state-error-text .ui-icon {
-	background-image: url("images/ui-icons_ff7519_256x240.png");
-}
-*/
 /* positioning */
 .ui-icon-blank { background-position: 16px 16px; }
 .ui-icon-carat-1-n { background-position: 0 0; }
@@ -1214,15 +1188,13 @@ body .ui-tooltip {
 }
 
 /* Overlays */
-.ui-widget-overlay {
-	background: #aaaaaa url("images/ui-bg_flat_75_aaaaaa_40x100.png") 50% 50% repeat-x;
+.ui-widget-overlay {	
 	opacity: .3;
 	filter: Alpha(Opacity=30); /* support: IE8 */
 }
 .ui-widget-shadow {
 	margin: -8px 0 0 -8px;
-	padding: 8px;
-	background: #aaaaaa url("images/ui-bg_flat_75_aaaaaa_40x100.png") 50% 50% repeat-x;
+	padding: 8px;	
 	opacity: .3;
 	filter: Alpha(Opacity=30); /* support: IE8 */
 	border-radius: 8px;
