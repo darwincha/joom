@@ -74,10 +74,7 @@ $database = mysqli_select_db($con,$database_conexion);
 				echo '<div class="home-idep-busqueda"><table><tr><td>';
 				echo ''.$row[5].'<br />';								
 				echo '<b>FORMATO:</b> '.$row[2].' / <b>TEMA:</b> '.$row[3].'<br />';
-				echo '<b>ENTIDAD PROVEEDORA:</b> '.$row[4].'<br />';
-				
-				$row[7]
-				
+				echo '<b>ENTIDAD PROVEEDORA:</b> '.$row[4].'<br />';					
 				if ($row[2]=='WMS')
 				{
 					if (strpos($row[1], '/MapServer/') !== false) 
