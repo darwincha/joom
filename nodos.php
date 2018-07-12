@@ -15,9 +15,9 @@ $database = mysqli_select_db($con,"idepcoor");
 if (is_numeric($entidad)) 
 {
 			
-	$sqlSector = "SELECT rstadetalle.vc_rstadet_nombre,rstadetalle.vc_rstadet_direcurl,rstadetalle.vc_rstadet_descripcion,rstadetalle.ch_pregtip_codigo,rstadetalle.vc_rsta_outputformat "
+	$sqlSector = "SELECT rstadetalle.vc_rstadet_nombre,rstadetalle.vc_rstadet_direcurl,rstadetalle.vc_rstadet_descripcion,rstadetalle.ch_pregtip_codigo,rstadetalle.vc_rsta_outputformat,rstadetalle.b_direcurl_estado "
 	. "FROM idepcoor.gen_entidad entidad, idepcoor.gepr_ta_respuesta respuesta, idepcoor.gepr_ta_rstadetalle rstadetalle "
-	. "WHERE (respuesta.entnid=entidad.entnid)and(rstadetalle.pk_id_rsta=respuesta.pk_id_rsta)and(entidad.entccodigo=$entidad)and((rstadetalle.ch_rstadet_accesolibre='SI')or(rstadetalle.ch_rstadet_accesolibre IS NULL))";		
+	. "WHERE (respuesta.entnid=entidad.entnid)and(rstadetalle.pk_id_rsta=respuesta.pk_id_rsta)and(entidad.entccodigo=$entidad)and((rstadetalle.ch_rstadet_accesolibre='SI')or(rstadetalle.ch_rstadet_accesolibre IS NULL))";			
 	$resultSector = mysqli_query($con,$sqlSector);
 	$num_servicios = mysqli_num_rows($resultSector);	
 	if($num_servicios>0){			
@@ -46,8 +46,8 @@ if (is_numeric($entidad))
 				else
 				{
 					$t = "3";
-				};							
-				if ($t !== "3") { 
+				};				
+				if (($t !== "3")and($row[5]==='1')) { 
 					$verresultado = "<div id='divContenido'><a href='http://mapas.geoidep.gob.pe/mapasperu/?config=viewer_wms&wmsuri=".$wmsuri."&wmstitle=".$wmstitle."&t=".$t."' target='_blank' class='clsBotonSearch' title='WMS : ".$row[1]."' >Ver Mapa</a></div>"; 
 				} else { 						
 					$verresultado = "<div id='divContenido'><a href='".$row[1]."' target='_blank' class='clsBotonSearch' >Acceder</a></div>";
