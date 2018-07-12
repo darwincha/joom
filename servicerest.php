@@ -36,8 +36,8 @@ $httphost = filter_input(INPUT_SERVER, 'HTTP_HOST');
 <body>
 <div id="tabs">
 	<ul>
-		<li><a href="#tabs-1">WMS por Entidad</a></li>
-    <li><a href="#tabs-2">WMS por Clasificación</a></li>
+		<li><a href="#tabs-1">REST por Entidad</a></li>
+    <li><a href="#tabs-2">REST por Clasificación</a></li>
 	</ul>
 <?php  
 	echo "<div id='tabs-1'><div id='accordion1'>";	
@@ -87,21 +87,23 @@ $httphost = filter_input(INPUT_SERVER, 'HTTP_HOST');
 			. "FROM idepcoor.gen_entidad entidad, idepcoor.gepr_ta_respuesta respuesta, idepcoor.gepr_ta_rstadetalle rstadetalle, idepcoor.gepr_ta_clasific clasificacion "
 			. "WHERE (respuesta.entnid=entidad.entnid) and (rstadetalle.pk_id_rsta=respuesta.pk_id_rsta) and (rstadetalle.pk_id_clasific=clasificacion.pk_id_clasific)and(rstadetalle.ch_pregtip_codigo='Servicios REST')and(rstadetalle.ch_rstadet_accesolibre='SI')and(clasificacion.vc_clasific_categoria='$clasificacion')"; 	
 		$resultListaClasif = mysqli_query($con,$sqlListaClasif); 
+			
+		
 		echo "<h3>$clasificacion</h3><div><table><thead><tr><th>Nombre del Servicio</th><th>Descripción</th><th>Proporcionado por</th><th>Estado</th><th>Dirección del Servicio</th><th>Acceso</th></tr></thead><tbody>";        		          
 		while ($row = mysqli_fetch_row($resultListaClasif))
 		{
-			if($row[5]=='activo.png'){$title="El servicio está operativo";$t="1";}else{$title="El servicio está temporalmente inactivo";$t="3";};	
-			$item=base64_encode("REST".$row[4]);						
-			echo "<tr><td>".$row[0]."</td><td>".$row[1]."</td><td>".$row[2]."</td><td>".$row[3]."</td>";
-			echo "<td><img title='".$title."' src='/images/".$row[5]."'></td><td><div id='divContenido'><a href='http://".$httphost."/servicios/modalservicio.php?serv=$item' class='clsVentanaIFrame clsBoton' rel='Detalle de Servicio' on>Ver dirección</a></div></td>";					
+			if($row[4]=='activo.png'){$title="El servicio está operativo";$t="1";}else{$title="El servicio está temporalmente inactivo";$t="3";};	
+			$item=base64_encode("REST".$row[3]);						
+			echo "<tr><td>".$row[0]."</td><td>".$row[1]."</td><td>".$row[2]."</td>";
+			echo "<td><img title='".$title."' src='/images/".$row[4]."'></td><td><div id='divContenido'><a href='http://".$httphost."/servicios/modalservicio.php?serv=$item' class='clsVentanaIFrame clsBoton' rel='Detalle de Servicio' on>Ver dirección</a></div></td>";					
 			echo "<td>";						
 			if($t==="1")
 			{
-				if (strpos($row[4],'MapServer')!==false)
+				if (strpos($row[3],'MapServer')!==false)
 				{ 
-					echo "<div id='divContenido'><a href='http://mapas.geoidep.gob.pe/mapasperu/?config=viewer_wms&wmsuri=".$row[4]."&wmstitle=".$row[0]."&t=1' target='_blank' class='clsBoton' title='Web Service : ".$row[4]."' >Ver Mapa</a></div>"; 
+					echo "<div id='divContenido'><a href='http://mapas.geoidep.gob.pe/mapasperu/?config=viewer_wms&wmsuri=".$row[3]."&wmstitle=".$row[0]."&t=1' target='_blank' class='clsBoton' title='Web Service : ".$row[3]."' >Ver Mapa</a></div>"; 
 				}else{
-					echo "<div id='divContenido'><a href='" .$row[4]."' target='_blank' class='clsBoton'>Acceder</a></div>";		
+					echo "<div id='divContenido'><a href='" .$row[3]."' target='_blank' class='clsBoton'>Acceder</a></div>";		
 				}
 			}
 			echo "</td></tr>";
