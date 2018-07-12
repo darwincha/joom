@@ -42,48 +42,38 @@ $httphost = filter_input(INPUT_SERVER, 'HTTP_HOST');
 <?php  
 	echo "<div id='tabs-1'><div id='accordion1'>";	
 	$sqlEntidad = "SELECT DISTINCT entidad.entvnombre "
-		. "FROM idepcoor.gen_entidad entidad, idepcoor.gepr_ta_respuesta respuesta, idepcoor.gepr_ta_rstadetalle rstadetalle "
-		. "WHERE (entidad.entnid=respuesta.entnid)and(respuesta.pk_id_rsta=rstadetalle.pk_id_rsta)and((rstadetalle.pk_id_pregtip='1')or(rstadetalle.pk_id_pregtip='10'))"	
-		. "ORDER BY entidad.entvnombre";		
+	. "FROM idepcoor.gen_entidad entidad, idepcoor.gepr_ta_respuesta respuesta, idepcoor.gepr_ta_rstadetalle rstadetalle "
+	. "WHERE (entidad.entnid=respuesta.entnid)and(respuesta.pk_id_rsta=rstadetalle.pk_id_rsta)and(rstadetalle.ch_pregtip_codigo='Servicios REST') "
+	. "ORDER BY entidad.entvnombre";			
 	$resultEntidad = mysqli_query($con,$sqlEntidad);
 	while ($row = mysqli_fetch_row($resultEntidad))                
 	{
 		$entidad=$row[0];     
 		$sqlListaSector = "SELECT rstadetalle.vc_rstadet_nombre,rstadetalle.vc_rstadet_descripcion,clasificacion.vc_clasific_categoria,entidad.entvnombre,rstadetalle.vc_rstadet_direcurl,CASE WHEN b_direcurl_estado='1' THEN 'activo.png' ELSE 'inactivo.png' END "
-			. "FROM idepcoor.gen_entidad entidad, idepcoor.gepr_ta_respuesta respuesta, idepcoor.gepr_ta_rstadetalle rstadetalle, idepcoor.gepr_ta_clasific clasificacion "
-			. "WHERE (respuesta.entnid=entidad.entnid)and(rstadetalle.pk_id_rsta=respuesta.pk_id_rsta)and(rstadetalle.pk_id_clasific=clasificacion.pk_id_clasific)and((rstadetalle.pk_id_pregtip='1')or(rstadetalle.pk_id_pregtip='10'))and(entidad.entvnombre='$entidad')"; 		
+		. "FROM idepcoor.gen_entidad entidad, idepcoor.gepr_ta_respuesta respuesta, idepcoor.gepr_ta_rstadetalle rstadetalle, idepcoor.gepr_ta_clasific clasificacion "
+		. "WHERE (respuesta.entnid=entidad.entnid)and(rstadetalle.pk_id_rsta=respuesta.pk_id_rsta)and(rstadetalle.pk_id_clasific=clasificacion.pk_id_clasific)and(rstadetalle.ch_pregtip_codigo='Servicios REST')and(rstadetalle.ch_rstadet_accesolibre='SI')and(entidad.entvnombre='$entidad')"; 		
 		$resultListaSector = mysqli_query($con,$sqlListaSector); 
-		echo "<h3>$entidad</h3><div><table><thead><tr><th>Nombre del Servicio</th><th>Descripción</th><th>Tema</th><th>Proporcionado por</th><th>Estado</th><th>Dirección del Servicio</th><th>Acceso</th></tr></thead><tbody>"; 
-			while ($row = mysqli_fetch_row($resultListaSector))      	
-			{			
-				if (strpos($row[4], '/MapServer/') !== false) 
-				{
-					$webservicewmsfull = str_replace("/services/", "/rest/services/", $row[4]); //añadir rest								
-					$webservicewmspart1 = explode("/WMSServer", $webservicewmsfull); //cortar hasta MapServer							
-					$wmsuri = $webservicewmspart1[0];
-					$wmstitle = $row[0];
-					$t = "1";
-				}		
-				elseif (strpos($row[4], '/wms?') !== false) {											
-					$nombrecapa = explode("&layers=", $row[4]); //&layers=
-					$wmstitle = $nombrecapa[1];						
-					$webservicewmsfull = explode("/wms?", $row[4]); //cortar hasta /wms?
-					$wmsuri = $webservicewmsfull[0]."/wms?service=WMS&request=GetMap"; //añadir getMap									
-					$t = "2";						
+		echo "<h3>$entidad</h3><div><table><thead><tr><th>Nombre del Servicio</th><th>Descripción</th><th>Tema</th><th>Proporcionado por</th><th>Estado</th><th>Dirección del Servicio</th><th>Acceso</th></tr></thead><tbody>";        		            
+		while ($row = mysqli_fetch_row($resultListaSector))
+		{
+			if($row[5]=='activo.png'){$title="El servicio está operativo";$t="1";}else{$title="El servicio está temporalmente inactivo";$t="3";};	
+			$item=base64_encode("REST".$row[4]);						
+			echo "<tr><td>".$row[0]."</td><td>".$row[1]."</td><td>".$row[2]."</td><td>".$row[3]."</td>";
+			echo "<td><img title='".$title."' src='/images/".$row[5]."'></td><td><div id='divContenido'><a href='http://".$httphost."/servicios/modalservicio.php?serv=$item' class='clsVentanaIFrame clsBoton' rel='Detalle de Servicio' on>Ver dirección</a></div></td>";					
+			echo "<td>";						
+			if($t==="1")
+			{
+				if (strpos($row[4],'MapServer')!==false)
+				{ 
+					echo "<div id='divContenido'><a href='http://mapas.geoidep.gob.pe/mapasperu/?config=viewer_wms&wmsuri=".$row[4]."&wmstitle=".$row[0]."&t=1' target='_blank' class='clsBoton' title='Web Service : ".$row[4]."' >Ver Mapa</a></div>"; 
+				}else{
+					echo "<div id='divContenido'><a href='" .$row[4]."' target='_blank' class='clsBoton'>Acceder</a></div>";		
 				}
-				else
-				{
-					$t = "3";
-				};						
-				if($row[5]=='activo.png'){$title="El servicio está operativo";}else{$title="El servicio está temporalmente inactivo";$t="3";};			
-				$item=base64_encode("WMS".$row[4]);			
-				echo "<tr><td>".$row[0]."</td><td>".$row[1]."</td><td>".$row[2]."</td><td>".$row[3]."</td>";				
-				echo "<td><img title='".$title."' src='/images/".$row[5]."'></td><td><div id='divContenido'><a href='http://".$httphost."/servicios/modalservicio.php?serv=$item' class='clsVentanaIFrame clsBoton' rel='Detalle de Servicio' on>Ver dirección</a></div></td>";
-				echo "<td>";
-				if ($t !== "3") { echo "<div id='divContenido'><a href='http://mapas.geoidep.gob.pe/mapasperu/?config=viewer_wms&wmsuri=".$wmsuri."&wmstitle=".$wmstitle."&t=".$t."' target='_blank' class='clsBoton' title='WMS : ".$row[4]."' >Ver Mapa</a></div>"; };
-				echo "</td></tr>";												
 			}
-			echo "</tbody></table></div> ";
+			echo "</td></tr>";
+		}            
+		echo "</tbody></table></div> ";		
+
 	}
 	echo "</div></div>"; 	
 	echo "<div id='tabs-2'><div id='accordion'>";        		
