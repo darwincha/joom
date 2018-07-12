@@ -43,14 +43,14 @@ $httphost = filter_input(INPUT_SERVER, 'HTTP_HOST');
 	echo "<div id='tabs-1'><div id='accordion1'>";	
 	$sqlSector = "SELECT DISTINCT poder.podvnombre "
     . "FROM idepcoor.gen_entidad entidad, idepcoor.gepr_ta_respuesta respuesta, idepcoor.gepr_ta_rstadetalle rstadetalle, idepcoor.ge_poder poder "
-    . "WHERE (poder.podnid=entidad.podnid)and(entidad.entnid=respuesta.entnid)and(respuesta.pk_id_rsta=rstadetalle.pk_id_rsta)and(respuesta.pk_id_preg='4')and(rstadetalle.ch_rstadet_accesolibre='SI')";	                                
+    . "WHERE (poder.podnid=entidad.podnid)and(entidad.entnid=respuesta.entnid)and(respuesta.pk_id_rsta=rstadetalle.pk_id_rsta)and(respuesta.pk_id_preg='4')and(rstadetalle.ch_pregtip_codigo<>'Servicios REST')and(rstadetalle.ch_rstadet_accesolibre='SI')";	                                
 	$resultSector = mysqli_query($con,$sqlSector);
  	while ($row = mysqli_fetch_row($resultSector))                
 	{
 		$sector=$row[0];        
 		$sqlListaSector = "SELECT rstadetalle.vc_rstadet_nombre,rstadetalle.vc_rstadet_descripcion,rstadetalle.ch_pregtip_codigo,clasificacion.vc_clasific_categoria,entidad.entvnombre,rstadetalle.vc_rstadet_direcurl,CASE WHEN b_direcurl_estado='1' THEN 'activo.png' ELSE 'inactivo.png' END "
       . "FROM idepcoor.gen_entidad entidad, idepcoor.gepr_ta_respuesta respuesta, idepcoor.gepr_ta_rstadetalle rstadetalle, idepcoor.gepr_ta_clasific clasificacion, idepcoor.ge_poder poder "
-      . "WHERE (respuesta.entnid=entidad.entnid)and(rstadetalle.pk_id_rsta=respuesta.pk_id_rsta)and(rstadetalle.pk_id_clasific=clasificacion.pk_id_clasific)and(poder.podnid=entidad.podnid)and(respuesta.pk_id_preg='4')and(rstadetalle.ch_rstadet_accesolibre='SI')and(poder.podvnombre='$sector')";						
+      . "WHERE (respuesta.entnid=entidad.entnid)and(rstadetalle.pk_id_rsta=respuesta.pk_id_rsta)and(rstadetalle.pk_id_clasific=clasificacion.pk_id_clasific)and(poder.podnid=entidad.podnid)and(respuesta.pk_id_preg='4')and(rstadetalle.ch_pregtip_codigo<>'Servicios REST')and(rstadetalle.ch_rstadet_accesolibre='SI')and(poder.podvnombre='$sector')";								
 		$resultListaSector = mysqli_query($con,$sqlListaSector); 		
 		echo "<h3>$sector</h3><div><table><thead><tr><th>Nombre del Servicio</th><th>Descripción</th><th>Tipo de Servicio</th><th>Tema</th><th>Proporcionado por</th><th>Estado</th><th>Dirección del Servicio</th><th>Acceso</th></tr></thead><tbody>"; 	
 		while ($row = mysqli_fetch_row($resultListaSector))   
@@ -77,14 +77,14 @@ $httphost = filter_input(INPUT_SERVER, 'HTTP_HOST');
 	echo "<div id='tabs-2'><div id='accordion'>";
 	$sqlClasificacion = "SELECT DISTINCT clasificacion.vc_clasific_categoria, clasificacion.pk_id_clasific "
 		. "FROM idepcoor.gepr_ta_clasific clasificacion, idepcoor.gepr_ta_rstadetalle rstadetalle, idepcoor.gepr_ta_respuesta respuesta "
-    . "WHERE (rstadetalle.pk_id_clasific=clasificacion.pk_id_clasific)and(respuesta.pk_id_rsta=rstadetalle.pk_id_rsta)and(respuesta.pk_id_preg='4')and(rstadetalle.ch_rstadet_accesolibre='SI')";   	
+    . "WHERE (rstadetalle.pk_id_clasific=clasificacion.pk_id_clasific)and(respuesta.pk_id_rsta=rstadetalle.pk_id_rsta)and(respuesta.pk_id_preg='4')and(rstadetalle.ch_pregtip_codigo<>'Servicios REST')and(rstadetalle.ch_rstadet_accesolibre='SI')";   	
 	$resultClasificacion = mysqli_query($con,$sqlClasificacion);                  
 	while ($row = mysqli_fetch_row($resultClasificacion))            
 	{
 		$clasificacion=$row[0];		
 		$sql_ = "SELECT rstadetalle.vc_rstadet_nombre,rstadetalle.vc_rstadet_descripcion,rstadetalle.ch_pregtip_codigo,entidad.entvnombre,rstadetalle.vc_rstadet_direcurl,CASE WHEN b_direcurl_estado='1' THEN 'activo.png' ELSE 'inactivo.png' END "
         . "FROM idepcoor.gen_entidad entidad, idepcoor.gepr_ta_respuesta respuesta, idepcoor.gepr_ta_rstadetalle rstadetalle, idepcoor.gepr_ta_clasific clasificacion, idepcoor.ge_poder poder "
-        . "WHERE (respuesta.entnid=entidad.entnid) and (rstadetalle.pk_id_rsta=respuesta.pk_id_rsta) and (rstadetalle.pk_id_clasific=clasificacion.pk_id_clasific) and (poder.podnid=entidad.podnid) and (respuesta.pk_id_preg='4')and(rstadetalle.ch_rstadet_accesolibre='SI')and(clasificacion.vc_clasific_categoria='$clasificacion')";                                                         	
+        . "WHERE (respuesta.entnid=entidad.entnid) and (rstadetalle.pk_id_rsta=respuesta.pk_id_rsta) and (rstadetalle.pk_id_clasific=clasificacion.pk_id_clasific) and (poder.podnid=entidad.podnid) and (respuesta.pk_id_preg='4')and(rstadetalle.ch_pregtip_codigo<>'Servicios REST')and(rstadetalle.ch_rstadet_accesolibre='SI')and(clasificacion.vc_clasific_categoria='$clasificacion')";                                                         	
 		$result_ = mysqli_query($con,$sql_);    		
 		echo "<h3>$clasificacion</h3><div><table><thead><tr><th>Nombre del Servicio</th><th>Descripción</th><th>Tipo de Servicio</th><th>Proporcionado por</th><th>Estado</th><th>Dirección del Servicio</th><th>Acceso</th></tr></thead><tbody>";        		            
 		while ($row = mysqli_fetch_row($result_))
