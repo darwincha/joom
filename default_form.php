@@ -48,7 +48,7 @@ $database = mysqli_select_db($con,$database_conexion);
 		$num_portales = mysqli_num_rows($resultportales);		
 		/* SERVICIOS WEB */				
 		$sqlServicios = "SELECT rstadetalle.vc_rstadet_nombre,rstadetalle.vc_rstadet_direcurl,rstadetalle.ch_pregtip_codigo, "
-		. "clasificacion.vc_clasific_categoria,entidad.entvnombre,rstadetalle.vc_rstadet_descripcion,rstadetalle.vc_rsta_outputformat "
+		. "clasificacion.vc_clasific_categoria,entidad.entvnombre,rstadetalle.vc_rstadet_descripcion,rstadetalle.vc_rsta_outputformat,rstadetalle.b_direcurl_estado "
 		. "FROM idepcoor.gen_entidad entidad, idepcoor.gepr_ta_respuesta respuesta, idepcoor.gepr_ta_rstadetalle rstadetalle, idepcoor.gepr_ta_clasific clasificacion "
 		. "WHERE ((rstadetalle.vc_rstadet_nombre like '%$cadena%')or(rstadetalle.vc_rstadet_descripcion like '%$cadena%')or(rstadetalle.vc_rstadet_direcurl like '%$cadena%')or(rstadetalle.vc_rstadet_keywords like '%$cadena%')) "
 		. "and((rstadetalle.ch_rstadet_accesolibre>='SI')or(rstadetalle.ch_rstadet_accesolibre is null))and(respuesta.entnid=entidad.entnid)and(rstadetalle.pk_id_rsta=respuesta.pk_id_rsta)and(rstadetalle.pk_id_clasific=clasificacion.pk_id_clasific)";				
@@ -75,6 +75,9 @@ $database = mysqli_select_db($con,$database_conexion);
 				echo ''.$row[5].'<br />';								
 				echo '<b>FORMATO:</b> '.$row[2].' / <b>TEMA:</b> '.$row[3].'<br />';
 				echo '<b>ENTIDAD PROVEEDORA:</b> '.$row[4].'<br />';
+				
+				$row[7]
+				
 				if ($row[2]=='WMS')
 				{
 					if (strpos($row[1], '/MapServer/') !== false) 
@@ -96,7 +99,7 @@ $database = mysqli_select_db($con,$database_conexion);
 					{
 						$t = "3";
 					};							
-					if ($t !== "3") { 
+					if (($t !== "3")and($row[7]==='1')) { 
 						$verresultado = "<div id='divContenido'><a href='http://mapas.geoidep.gob.pe/mapasperu/?config=viewer_wms&wmsuri=".$wmsuri."&wmstitle=".$wmstitle."&t=".$t."' target='_blank' class='clsBotonSearch' title='WMS : ".$row[1]."' >Ver Mapa</a></div>"; 
 					} else { 						
 						$verresultado = "<div id='divContenido'><a href='".$row[1]."' target='_blank' class='clsBotonSearch' >Acceder</a></div>";
